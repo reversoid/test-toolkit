@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap");
 
 body {
   background: linear-gradient(
@@ -6,10 +6,16 @@ body {
     hsla(266, 75%, 55%, 1) 0%,
     hsla(340, 47%, 77%, 1) 100%
   );
-  font-family: 'Golos Text', sans-serif;
+  font-family: "Golos Text", sans-serif;
 }
 
 * {
-  transition: '0.1s ease-in-out'
+  transition: "0.1s ease-in-out";
+}
+
+html,
+body,
+#root {
+  height: 100%;
 }
 
