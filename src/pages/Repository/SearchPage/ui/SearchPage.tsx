@@ -4,8 +4,14 @@ import RepositoryItem from "../../../../entities/repository/ui/RepositoryItem";
 import Paginator from "../../../../shared/ui/Paginator/Paginator";
 import { RepositoryContainer } from "./RepositoryContainer";
 import { PaginatorContainer } from "./PaginatorContainer";
+import { useSearchParams, createSearchParams } from "react-router-dom";
 
 const SearchPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const handlePaginatorClick = (currentPage: number) => {
+    setSearchParams({ page: String(currentPage) });
+  };
+
   return (
     <>
       <Input
@@ -24,7 +30,7 @@ const SearchPage = () => {
       </RepositoryContainer>
 
       <PaginatorContainer>
-        <Paginator from={1} to={10} />
+        <Paginator from={1} to={10} onSelect={handlePaginatorClick} />
       </PaginatorContainer>
     </>
   );

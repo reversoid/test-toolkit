@@ -23,6 +23,7 @@ const PageNumberButton = styled("button", {
 export interface PaginatorProps {
   from: number;
   to: number;
+  onSelect?: (page: number) => void;
 }
 
 const createArrayFromTo = ({ from, to }: PaginatorProps) => {
@@ -33,13 +34,19 @@ const createArrayFromTo = ({ from, to }: PaginatorProps) => {
   return result;
 };
 
-const Paginator: FC<PaginatorProps> = ({ from, to }) => {
+const Paginator: FC<PaginatorProps> = ({ from, to, onSelect }) => {
   const numbers = useMemo(() => createArrayFromTo({ from, to }), [from, to]);
 
   return (
     <PaginatorContainer>
       {numbers.map((n) => (
-        <PageNumberButton onClick={(e) => (e.target as HTMLButtonElement).blur()} key={n}>
+        <PageNumberButton
+          onClick={(e) => {
+            onSelect && onSelect(n)
+            return (e.target as HTMLButtonElement).blur();
+          }}
+          key={n}
+        >
           {n}
         </PageNumberButton>
       ))}
