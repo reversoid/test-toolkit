@@ -2,6 +2,7 @@ import { styled } from "@stitches/react";
 import React, { FC, useMemo } from "react";
 import { Link } from "../../../shared/ui/Link/Link";
 import { dateFormatter } from "../../../shared/utils/dateFormatter";
+import { NavLink } from "../../../shared/ui/Link/NavLink";
 
 const ItemContainer = styled("div", {
   display: "flex",
@@ -37,9 +38,9 @@ const RepositoryItem: FC<RepositoryItemProps> = (props) => {
 
   return (
     <ItemContainer>
-      <Link href={props.link}>
+      <NavLink to={props.link}>
         <ItemName>{props.name}</ItemName>
-      </Link>
+      </NavLink>
 
       <ItemProperty>stars: {props.stars}</ItemProperty>
       <ItemProperty>last commit: {formattedDate}</ItemProperty>

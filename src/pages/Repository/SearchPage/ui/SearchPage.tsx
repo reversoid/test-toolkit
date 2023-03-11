@@ -17,7 +17,7 @@ const SearchPage = () => {
       <RepositoryContainer>
         <RepositoryItem
           lastCommitDate={new Date()}
-          link="https://google.com"
+          link="/repository/1"
           name="heh"
           stars={10}
         />
