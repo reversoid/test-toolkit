@@ -60,9 +60,7 @@ class RepositoryService {
     } else if (page) {
       const {
         search: { pageInfo, repositoryCount },
-      } = await this.getLastCursor({ page, username });
-      console.log(pageInfo, repositoryCount);
-      
+      } = await this.getLastCursor({ page, username });      
 
       if (this.pageGoesBeyondRepoCount(page, repositoryCount)) {
         const EMPTY_RESPONSE = {
