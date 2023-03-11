@@ -1,5 +1,5 @@
-import SearchPage from "../pages/Repository/SearchPage/SearchPage";
-import { Wrapper } from "../shared/ui/Wrapper/Wrapper";
+import SearchPage from "../pages/Repository/SearchPage/ui/SearchPage";
+import { Wrapper } from "./ui/Wrapper/Wrapper";
 
 function App() {
   return (

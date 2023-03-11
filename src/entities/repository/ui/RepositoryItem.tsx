@@ -1,7 +1,7 @@
 import { styled } from "@stitches/react";
 import React, { FC, useMemo } from "react";
-import { Link } from "../../../../shared/ui/Link/Link";
-import { dateFormatter } from "../../../../shared/utils/dateFormatter";
+import { Link } from "../../../shared/ui/Link/Link";
+import { dateFormatter } from "../../../shared/utils/dateFormatter";
 
 const ItemContainer = styled("div", {
   display: "flex",

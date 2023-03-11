@@ -1,13 +1,9 @@
 import React from "react";
-import { Input } from "../../../shared/ui/Input/Input";
-import { styled } from "@stitches/react";
-import RepositoryItem from "../../../features/repository/components/RepositoryItem/RepositoryItem";
-
-const RepositoryContainer = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  marginTop: "2rem",
-});
+import { Input } from "../../../../shared/ui/Input/Input";
+import RepositoryItem from "../../../../entities/repository/ui/RepositoryItem";
+import Paginator from "../../../../shared/ui/Paginator/Paginator";
+import { RepositoryContainer } from "./RepositoryContainer";
+import { PaginatorContainer } from "./PaginatorContainer";
 
 const SearchPage = () => {
   return (
@@ -17,6 +13,7 @@ const SearchPage = () => {
         css={{ width: "100%" }}
         placeholder="Название репозитория"
       />
+
       <RepositoryContainer>
         <RepositoryItem
           lastCommitDate={new Date()}
@@ -25,6 +22,10 @@ const SearchPage = () => {
           stars={10}
         />
       </RepositoryContainer>
+
+      <PaginatorContainer>
+        <Paginator from={1} to={10} />
+      </PaginatorContainer>
     </>
   );
 };
