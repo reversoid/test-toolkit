@@ -5,12 +5,16 @@ import Paginator from "../../../../shared/ui/Paginator/Paginator";
 import { RepositoryContainer } from "./RepositoryContainer";
 import { PaginatorContainer } from "./PaginatorContainer";
 import { useSearchParams, createSearchParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { getRepositories } from "../api/getRepositories";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const handlePaginatorClick = (currentPage: number) => {
     setSearchParams({ page: String(currentPage) });
   };
+
+  const { data, error } = useQuery(getRepositories());
 
   return (
     <>
