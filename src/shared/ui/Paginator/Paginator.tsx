@@ -8,13 +8,16 @@ const PaginatorContainer = styled("div", {
   gap: "1rem",
 });
 
-const PageNumberItem = styled("div", {
+const PageNumberButton = styled("button", {
   borderRadius: "0.25rem",
   minWidth: "1.25rem",
   height: "1.25rem",
-  padding: '0 0.125rem',
+  padding: "0 0.125rem",
   background: "white",
   textAlign: "center",
+  "&:focus": {
+    boxShadow: "0 0 10px white",
+  },
 });
 
 export interface PaginatorProps {
@@ -36,7 +39,9 @@ const Paginator: FC<PaginatorProps> = ({ from, to }) => {
   return (
     <PaginatorContainer>
       {numbers.map((n) => (
-        <PageNumberItem>{n}</PageNumberItem>
+        <PageNumberButton onClick={(e) => (e.target as HTMLButtonElement).blur()} key={n}>
+          {n}
+        </PageNumberButton>
       ))}
     </PaginatorContainer>
   );
