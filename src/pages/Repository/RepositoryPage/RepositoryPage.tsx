@@ -30,7 +30,7 @@ const RepositoryPage = () => {
       <Title>moofy-frontend</Title>
       <PageContainer>
         <Property>Stars: 10</Property>
-        <Property>Last commit cate: 10.10.2020</Property>
+        <Property>Last commit date: 10.10.2020</Property>
         <Property>
           Creator: <Link href="https://google.com">reversoid</Link>
         </Property>
