@@ -4,20 +4,36 @@ import { Input } from "../../../shared/ui/Input/Input";
 import Paginator from "../../../shared/ui/Paginator/Paginator";
 import { PaginatorContainer } from "./ui/PaginatorContainer";
 import { RepositoryContainer } from "./ui/RepositoryContainer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { $repositories, fetchRepositories } from "./model";
 import { useStore } from "effector-react";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    const page = Number(searchParams.get("page"));
-    const repoName = searchParams.get("repoName") ?? undefined;
-    const pageToSearch = !page || page === 1 ? 1 : page;
+  const [info, setInfo] = useState({
+    page: Number(searchParams.get("page")) || 1,
+    repoName: searchParams.get("repoName") ?? undefined,
+  });
 
-    fetchRepositories({ page: pageToSearch, repoName });
+  useEffect(() => {
+    setInfo({
+      page: Number(searchParams.get("page")) || 1,
+      repoName: searchParams.get("repoName") ?? undefined,
+    });
   }, [searchParams.get("page"), searchParams.get("repoName")]);
+
+  useEffect(() => {
+    if (!info.repoName) {
+      searchParams.delete("repoName");
+    } else {
+      searchParams.set("repoName", info.repoName);
+    }
+    searchParams.set("page", String(info.page));
+
+    setSearchParams(searchParams);
+    fetchRepositories(info);
+  }, [info]);
 
   const repositories = useStore($repositories);
 
@@ -27,12 +43,12 @@ const SearchPage = () => {
         type="text"
         css={{ width: "100%" }}
         placeholder="Название репозитория"
+        value={info.repoName ?? ""}
         onChange={(e) => {
           if (e.target.value.length > 0) {
-            setSearchParams({ repoName: e.target.value });
+            setInfo({ ...info, repoName: e.target.value });
           } else {
-            searchParams.delete("repoName");
-            setSearchParams(searchParams);
+            setInfo({ ...info, repoName: undefined });
           }
         }}
       />
