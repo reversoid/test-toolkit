@@ -19,3 +19,7 @@ body,
   min-height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
