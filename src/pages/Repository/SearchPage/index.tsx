@@ -1,15 +1,12 @@
-import React from "react";
-import { Input } from "../../../../shared/ui/Input/Input";
-import RepositoryItem from "../../../../entities/repository/ui/RepositoryItem";
-import Paginator from "../../../../shared/ui/Paginator/Paginator";
-import { RepositoryContainer } from "./RepositoryContainer";
-import { PaginatorContainer } from "./PaginatorContainer";
-import { useSearchParams, createSearchParams } from "react-router-dom";
-import { useQuery, execute, useLazyQuery } from "@apollo/client";
-import {
-  GetRepositoriesResponse,
-  getRepositories,
-} from "../api/getRepositories";
+import { useLazyQuery } from "@apollo/client";
+import { useSearchParams } from "react-router-dom";
+import RepositoryItem from "../../../entities/repository/ui/RepositoryItem";
+import { Input } from "../../../shared/ui/Input/Input";
+import Paginator from "../../../shared/ui/Paginator/Paginator";
+import { GetRepositoriesResponse, getRepositories } from "./api/getRepositories";
+import { PaginatorContainer } from "./ui/PaginatorContainer";
+import { RepositoryContainer } from "./ui/RepositoryContainer";
+
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
