@@ -2,28 +2,22 @@ import { useSearchParams } from "react-router-dom";
 import RepositoryItem from "../../../entities/repository/ui/RepositoryItem";
 import { Input } from "../../../shared/ui/Input/Input";
 import Paginator from "../../../shared/ui/Paginator/Paginator";
-import { getRepositoriesQuery } from "./api/getRepositories";
 import { PaginatorContainer } from "./ui/PaginatorContainer";
 import { RepositoryContainer } from "./ui/RepositoryContainer";
 import { useEffect } from "react";
-import { fetchGQL } from "../../../app/api/fetchGQL";
 import { $repositories, fetchRepositories } from "./model";
 import { useStore } from "effector-react";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const handlePaginatorClick = (currentPage: number) => {
-    setSearchParams({ page: String(currentPage) });
-  };
 
   useEffect(() => {
     const page = Number(searchParams.get("page"));
-    if (!page || page === 1) {
-      fetchRepositories({ page: 1 });
-    } else {
-      fetchRepositories({ page });
-    }
-  }, [searchParams.get("page")]);
+    const repoName = searchParams.get("repoName") ?? undefined;
+    const pageToSearch = !page || page === 1 ? 1 : page;
+
+    fetchRepositories({ page: pageToSearch, repoName });
+  }, [searchParams.get("page"), searchParams.get("repoName")]);
 
   const repositories = useStore($repositories);
 
@@ -33,6 +27,14 @@ const SearchPage = () => {
         type="text"
         css={{ width: "100%" }}
         placeholder="Название репозитория"
+        onChange={(e) => {
+          if (e.target.value.length > 0) {
+            setSearchParams({ repoName: e.target.value });
+          } else {
+            searchParams.delete("repoName");
+            setSearchParams(searchParams);
+          }
+        }}
       />
 
       <RepositoryContainer>
@@ -52,7 +54,13 @@ const SearchPage = () => {
       </RepositoryContainer>
 
       <PaginatorContainer>
-        <Paginator from={1} to={2} onSelect={handlePaginatorClick} />
+        <Paginator
+          from={1}
+          to={2}
+          onSelect={(currentPage) =>
+            setSearchParams({ page: String(currentPage) })
+          }
+        />
       </PaginatorContainer>
     </>
   );
