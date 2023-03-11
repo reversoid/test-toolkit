@@ -1,11 +1,22 @@
-import RepositoryPage from "../pages/Repository/RepositoryPage/RepositoryPage";
-import SearchPage from "../pages/Repository/SearchPage/ui/SearchPage";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Wrapper } from "./ui/Wrapper/Wrapper";
+import { routes as repositoryRoutes } from "../pages/Repository/routes";
+
+const router = createBrowserRouter([
+  {
+    path: "repository",
+    children: repositoryRoutes
+  },
+  {
+    path: '*',
+    element: <Navigate to={'/repository'}/>
+  }
+]);
 
 function App() {
   return (
     <Wrapper>
-      <RepositoryPage />
+      <RouterProvider router={router} />
     </Wrapper>
   );
 }
