@@ -1,5 +1,7 @@
 import { gql } from "@apollo/client";
 
+export const PAGE_LIMIT = 10
+
 export interface GetRepositoriesResponse {
   data: {
     viewer: {
@@ -28,10 +30,27 @@ export interface GetRepositoriesResponse {
   };
 }
 
-export const getRepositories = (afterCursor?: string) => gql`
+export interface GetRepositoriesParams {
+  afterCursor?: string;
+  offset?: number;
+}
+
+const generateGQLParamsString = ({
+  afterCursor,
+  offset,
+}: GetRepositoriesParams) => {
+  if (afterCursor) {
+    return ` after: "${afterCursor}"`;
+  } else if (offset !== undefined) {
+    return ` offset: ${1}`;
+  }
+  return "";
+};
+
+export const getRepositories = (params: GetRepositoriesParams) => gql`
   query {
     viewer {
-      repositories(first: 10 ${afterCursor ? ", after: " + afterCursor : ""}) {
+      repositories(first: ${PAGE_LIMIT} ${generateGQLParamsString(params)}) {
         edges {
           repository: node {
             name

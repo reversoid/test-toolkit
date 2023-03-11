@@ -3,10 +3,16 @@ import { useSearchParams } from "react-router-dom";
 import RepositoryItem from "../../../entities/repository/ui/RepositoryItem";
 import { Input } from "../../../shared/ui/Input/Input";
 import Paginator from "../../../shared/ui/Paginator/Paginator";
-import { GetRepositoriesResponse, getRepositories } from "./api/getRepositories";
+import {
+  GetRepositoriesResponse,
+  PAGE_LIMIT,
+  getRepositories,
+} from "./api/getRepositories";
 import { PaginatorContainer } from "./ui/PaginatorContainer";
 import { RepositoryContainer } from "./ui/RepositoryContainer";
-
+import { convertReposResponse } from "./utils/convertReposResponse";
+import { setRepositories } from "./model";
+import { useEffect } from "react";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,7 +20,26 @@ const SearchPage = () => {
     setSearchParams({ page: String(currentPage) });
   };
 
-  const [callback] = useLazyQuery<GetRepositoriesResponse>(getRepositories());
+  const [callback, { data }] = useLazyQuery<GetRepositoriesResponse>(
+    getRepositories({}),
+    {
+      onCompleted: (data) => {
+        const convertedData = convertReposResponse(data);
+        setRepositories(convertedData);
+      },
+    }
+  );
+
+  useEffect(() => {
+    const page = Number(searchParams.get("page"));
+    if (!page || page === 1) {
+      callback();
+    } else {
+      callback({ query: getRepositories({ offset: 10 }) });
+    }
+  }, [searchParams.get("page")]);
+
+  console.log(data);
 
   return (
     <>
@@ -34,7 +59,7 @@ const SearchPage = () => {
       </RepositoryContainer>
 
       <PaginatorContainer>
-        <Paginator from={1} to={10} onSelect={handlePaginatorClick} />
+        <Paginator from={1} to={2} onSelect={handlePaginatorClick} />
       </PaginatorContainer>
     </>
   );

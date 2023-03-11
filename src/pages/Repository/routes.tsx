@@ -1,6 +1,6 @@
 import { Navigate, Route, RouteObject } from "react-router-dom";
-import SearchPage from "./SearchPage/ui/SearchPage";
 import RepositoryPage from "./RepositoryPage/RepositoryPage";
+import SearchPage from "./SearchPage";
 
 export const routes: RouteObject[] = [
   {
