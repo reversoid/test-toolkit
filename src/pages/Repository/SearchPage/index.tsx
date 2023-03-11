@@ -1,19 +1,14 @@
-import { useLazyQuery } from "@apollo/client";
 import { useSearchParams } from "react-router-dom";
 import RepositoryItem from "../../../entities/repository/ui/RepositoryItem";
 import { Input } from "../../../shared/ui/Input/Input";
 import Paginator from "../../../shared/ui/Paginator/Paginator";
-import {
-  GetRepositoriesResponse,
-  PAGE_LIMIT,
-  getRepositories,
-  introspect,
-} from "./api/getRepositories";
+import { getRepositories } from "./api/getRepositories";
 import { PaginatorContainer } from "./ui/PaginatorContainer";
 import { RepositoryContainer } from "./ui/RepositoryContainer";
-import { convertReposResponse } from "./utils/convertReposResponse";
-import { setRepositories } from "./model";
 import { useEffect } from "react";
+import { fetchGQL } from "../../../app/api/fetchGQL";
+import { $repositories, fetchRepositories } from "./model";
+import { useStore } from "effector-react";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,26 +16,16 @@ const SearchPage = () => {
     setSearchParams({ page: String(currentPage) });
   };
 
-  const [callback, { data }] = useLazyQuery<GetRepositoriesResponse>(
-    getRepositories({}),
-    {
-      onCompleted: (data) => {
-        const convertedData = convertReposResponse(data);
-        setRepositories(convertedData);
-      },
-    }
-  );
-
   useEffect(() => {
     const page = Number(searchParams.get("page"));
     if (!page || page === 1) {
-      callback();
+      fetchRepositories({ page: 1 });
     } else {
-      callback({ query: getRepositories({}) });
+      fetchGQL(getRepositories({}));
     }
   }, [searchParams.get("page")]);
 
-  console.log(data);
+  const repositories = useStore($repositories);
 
   return (
     <>
@@ -51,12 +36,17 @@ const SearchPage = () => {
       />
 
       <RepositoryContainer>
-        <RepositoryItem
-          lastCommitDate={new Date()}
-          link="/repository/1"
-          name="heh"
-          stars={10}
-        />
+        {repositories
+          ? repositories.repositories.map((r) => {
+              return <RepositoryItem
+                lastCommitDate={new Date(r.updatedAt)}
+                link="/repository/1"
+                name={r.name}
+                stars={r.stargazerCount}
+                key={r.owner.name + r.name}
+              />;
+            })
+          : ""}
       </RepositoryContainer>
 
       <PaginatorContainer>

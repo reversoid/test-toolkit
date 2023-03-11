@@ -21,11 +21,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <ApolloProvider client={client}>
-      <Wrapper>
-        <RouterProvider router={router} />
-      </Wrapper>
-    </ApolloProvider>
+    <Wrapper>
+      <RouterProvider router={router} />
+    </Wrapper>
   );
 }
 

@@ -4,21 +4,20 @@ import { RepositoryState } from "../model";
 export const convertReposResponse = (
   response: GetRepositoriesResponse
 ): RepositoryState => {
-  return response.data.viewer.repositories.edges.map(
-    ({ cursor, repository }) => ({
-      cursor: cursor,
-      repository: {
-        description: repository.description,
-        languages: repository.languages.nodes.map((r) => ({ name: r.name })),
-        name: repository.name,
-        owner: {
-          avatarUrl: repository.owner.avatarUrl,
-          name: repository.owner.login,
-          url: repository.owner.url,
-        },
-        stargazerCount: repository.stargazerCount,
-        updatedAt: new Date(repository.updatedAt),
+  return {
+    repositories: response.search.edges.map(({ node }) => ({
+      description: node.description,
+      languages: node.languages.nodes.map((r) => ({ name: r.name })),
+      name: node.name,
+      owner: {
+        avatarUrl: node.owner.avatarUrl,
+        name: node.owner.login,
+        url: node.owner.url,
       },
-    })
-  );
+      stargazerCount: node.stargazerCount,
+      updatedAt: new Date(node.updatedAt),
+    })),
+
+    lastCursor: response.search.pageInfo.endCursor,
+  };
 };
