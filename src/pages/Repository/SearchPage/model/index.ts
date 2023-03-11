@@ -19,7 +19,7 @@ export interface Repository {
   languages: Language[];
 }
 
-type RepositoryState = {
+export type RepositoryState = {
   repository: Repository;
   cursor: string;
 }[];
