@@ -27,6 +27,8 @@ export interface GetRepositoriesResponse {
           login: string;
           url: string;
         };
+        id: string;
+        url: string;
       };
     }[];
   };
@@ -80,6 +82,8 @@ export const getRepositoriesQuery = ({
             description
             stargazerCount
             updatedAt
+            id
+            url
             languages(first: 100) {
               nodes {
                 name

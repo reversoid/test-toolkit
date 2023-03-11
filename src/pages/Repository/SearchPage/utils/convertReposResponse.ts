@@ -16,6 +16,8 @@ export const convertReposResponse = (
       },
       stargazerCount: node.stargazerCount,
       updatedAt: new Date(node.updatedAt),
+      id: node.id,
+      url: node.url
     })),
 
     lastCursor: response.search.pageInfo.endCursor,

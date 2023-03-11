@@ -15,4 +15,6 @@ export interface Repository {
   updatedAt: Date;
   owner: Owner;
   languages: Language[];
+  id: string;
+  url: string;
 }
