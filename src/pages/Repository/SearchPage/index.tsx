@@ -7,6 +7,7 @@ import {
   GetRepositoriesResponse,
   PAGE_LIMIT,
   getRepositories,
+  introspect,
 } from "./api/getRepositories";
 import { PaginatorContainer } from "./ui/PaginatorContainer";
 import { RepositoryContainer } from "./ui/RepositoryContainer";
@@ -35,7 +36,7 @@ const SearchPage = () => {
     if (!page || page === 1) {
       callback();
     } else {
-      callback({ query: getRepositories({ offset: 10 }) });
+      callback({ query: getRepositories({}) });
     }
   }, [searchParams.get("page")]);
 
