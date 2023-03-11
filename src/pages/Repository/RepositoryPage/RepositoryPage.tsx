@@ -34,7 +34,7 @@ const RepositoryPage = () => {
         <Property>
           Creator: <Link href="https://google.com">reversoid</Link>
         </Property>
-        <Property>languages: Typescript, React</Property>
+        <Property>Languages: Typescript, React</Property>
         <Property>Short description: Hello there!</Property>
         <Img src="https://avatars.mds.yandex.net/i?id=b14bd3bcf8f1ca20e0acccdbd5867731ac836f80-8497350-images-thumbs&n=13" />
       </PageContainer>
