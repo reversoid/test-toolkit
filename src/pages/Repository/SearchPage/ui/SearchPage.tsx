@@ -5,8 +5,11 @@ import Paginator from "../../../../shared/ui/Paginator/Paginator";
 import { RepositoryContainer } from "./RepositoryContainer";
 import { PaginatorContainer } from "./PaginatorContainer";
 import { useSearchParams, createSearchParams } from "react-router-dom";
-import { useQuery, execute } from "@apollo/client";
-import { GetRepositoriesResponse, getRepositories } from "../api/getRepositories";
+import { useQuery, execute, useLazyQuery } from "@apollo/client";
+import {
+  GetRepositoriesResponse,
+  getRepositories,
+} from "../api/getRepositories";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,7 +17,7 @@ const SearchPage = () => {
     setSearchParams({ page: String(currentPage) });
   };
 
-  const { data, error, observable } = useQuery<GetRepositoriesResponse>(getRepositories());
+  const [callback] = useLazyQuery<GetRepositoriesResponse>(getRepositories());
 
   return (
     <>
