@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import RepositoryItem from "../../../entities/repository/ui/RepositoryItem";
 import { Input } from "../../../shared/ui/Input/Input";
 import Paginator from "../../../shared/ui/Paginator/Paginator";
-import { getRepositories } from "./api/getRepositories";
+import { getRepositoriesQuery } from "./api/getRepositories";
 import { PaginatorContainer } from "./ui/PaginatorContainer";
 import { RepositoryContainer } from "./ui/RepositoryContainer";
 import { useEffect } from "react";
@@ -21,7 +21,7 @@ const SearchPage = () => {
     if (!page || page === 1) {
       fetchRepositories({ page: 1 });
     } else {
-      fetchGQL(getRepositories({}));
+      fetchGQL(getRepositoriesQuery({}));
     }
   }, [searchParams.get("page")]);
 

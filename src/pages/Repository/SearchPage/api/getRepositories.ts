@@ -56,7 +56,7 @@ export const generateSearchQuery = ({ repoName, username }: GetRepositoriesParam
   return result;
 };
 
-export const getRepositories = ({
+export const getRepositoriesQuery = ({
   afterCursor,
   username,
   repoName,
