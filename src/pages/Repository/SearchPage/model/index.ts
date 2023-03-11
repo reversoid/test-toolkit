@@ -21,7 +21,7 @@ export const fetchMyRepositoriesFx = createEffect<
 >();
 fetchMyRepositoriesFx.use(async ({ lastCursor, page }) =>
   repositoryService
-    .getMyRepositories({ afterCursor: lastCursor, page: page })
+    .getMyRepositories({ afterCursor: lastCursor, page })
     .then((r) => convertReposResponse(r))
 );
 

@@ -21,7 +21,7 @@ const SearchPage = () => {
     if (!page || page === 1) {
       fetchRepositories({ page: 1 });
     } else {
-      fetchGQL(getRepositoriesQuery({}));
+      fetchRepositories({ page });
     }
   }, [searchParams.get("page")]);
 
@@ -38,13 +38,15 @@ const SearchPage = () => {
       <RepositoryContainer>
         {repositories
           ? repositories.repositories.map((r) => {
-              return <RepositoryItem
-                lastCommitDate={new Date(r.updatedAt)}
-                link="/repository/1"
-                name={r.name}
-                stars={r.stargazerCount}
-                key={r.owner.name + r.name}
-              />;
+              return (
+                <RepositoryItem
+                  lastCommitDate={new Date(r.updatedAt)}
+                  link="/repository/1"
+                  name={r.name}
+                  stars={r.stargazerCount}
+                  key={r.owner.name + r.name}
+                />
+              );
             })
           : ""}
       </RepositoryContainer>

@@ -29,7 +29,7 @@ class RepositoryService {
         search: { pageInfo, repositoryCount },
       } = await this.getLastCursor({ page, repoName });
 
-      if (repositoryCount < page * PAGE_LIMIT) {
+      if (this.pageGoesBeyondRepoCount(page, repositoryCount)) {
         const EMPTY_RESPONSE = {
           search: { repositoryCount, pageInfo, edges: [] },
         };
@@ -61,8 +61,10 @@ class RepositoryService {
       const {
         search: { pageInfo, repositoryCount },
       } = await this.getLastCursor({ page, username });
+      console.log(pageInfo, repositoryCount);
+      
 
-      if (repositoryCount < page * PAGE_LIMIT) {
+      if (this.pageGoesBeyondRepoCount(page, repositoryCount)) {
         const EMPTY_RESPONSE = {
           search: { repositoryCount, pageInfo, edges: [] },
         };
@@ -77,6 +79,10 @@ class RepositoryService {
     }
 
     return (await fetchGQL<GetRepositoriesResponse>(query)).data;
+  }
+
+  private pageGoesBeyondRepoCount(page: number, repositoryCount: number) {
+    return Math.floor(PAGE_LIMIT * page / repositoryCount) > 1
   }
 
   private async getLastCursor({
