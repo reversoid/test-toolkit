@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     path: "*",
     element: <Navigate to={"/repository"} />,
   },
-]);
+], {basename: '/test-toolkit/'});
 
 function App() {
   return (
