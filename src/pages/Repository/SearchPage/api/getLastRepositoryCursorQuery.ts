@@ -4,7 +4,7 @@ import {
   PAGE_LIMIT,
   generateGQLParamsString,
   generateSearchQuery,
-} from "./getRepositories";
+} from "./getRepositoriesQuery";
 
 export interface GetLastRepositoryCursorResponse {
     search: {

@@ -62,7 +62,7 @@ const SearchPage = () => {
                   link={`/repository/${r.id}`}
                   name={r.name}
                   stars={r.stargazerCount}
-                  key={r.owner.name + r.name}
+                  key={r.id}
                 />
               );
             })

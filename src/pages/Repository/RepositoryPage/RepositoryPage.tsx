@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { Input } from "../../../shared/ui/Input/Input";
 import { styled } from "@stitches/react";
 import { Link } from "../../../shared/ui/Link/Link";
+import { useParams } from "react-router-dom";
+import { $repository, fetchRepository } from "./model";
+import { useStore } from "effector-react";
+import { dateFormatter } from "../../../shared/utils/dateFormatter";
 
 const Title = styled("h1", {
   fontSize: "3rem",
@@ -14,8 +18,8 @@ const Img = styled("img", {
   width: "5rem",
   height: "5rem",
   objectFit: "cover",
-  borderRadius: '50%',
-  border: '2px solid white'
+  borderRadius: "50%",
+  border: "2px solid white",
 });
 
 const PageContainer = styled("div", {
@@ -25,18 +29,47 @@ const PageContainer = styled("div", {
 });
 
 const RepositoryPage = () => {
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetchRepository({ id: String(id) });
+  }, []);
+
+  const repository = useStore($repository);
+
+  const lastCommitDate = useMemo(() => {
+    return repository?.updatedAt && dateFormatter(repository?.updatedAt);
+  }, [repository?.updatedAt]);
+
+  console.log(repository);
+
   return (
     <>
-      <Title>moofy-frontend</Title>
+      <Link
+        href={repository?.url ?? ""}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Title>{repository?.name}</Title>
+      </Link>
       <PageContainer>
-        <Property>Stars: 10</Property>
-        <Property>Last commit date: 10.10.2020</Property>
+        <Property>Stars: {repository?.stargazerCount}</Property>
+        <Property>Last commit date: {lastCommitDate}</Property>
         <Property>
-          Creator: <Link href="https://google.com">reversoid</Link>
+          Creator:{" "}
+          <Link
+            href={repository?.owner.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {repository?.owner.name}
+          </Link>
         </Property>
-        <Property>Languages: Typescript, React</Property>
-        <Property>Short description: Hello there!</Property>
-        <Img src="https://avatars.mds.yandex.net/i?id=b14bd3bcf8f1ca20e0acccdbd5867731ac836f80-8497350-images-thumbs&n=13" />
+        <Property>
+          Languages: {repository?.languages.map((l) => l.name).join(", ")}
+        </Property>
+        <Property>Short description: {repository?.description}</Property>
+        <Img src={repository?.owner.avatarUrl ?? ""} />
       </PageContainer>
     </>
   );

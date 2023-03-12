@@ -4,11 +4,11 @@ import {
   GetRepositoriesResponse,
   PAGE_LIMIT,
   getRepositoriesQuery,
-} from "./getRepositories";
+} from "./getRepositoriesQuery";
 import {
   GetLastRepositoryCursorResponse,
   getLastRepositoryCursor,
-} from "./getLastRepositoryCursor";
+} from "./getLastRepositoryCursorQuery";
 
 export interface Options {
   page?: number;

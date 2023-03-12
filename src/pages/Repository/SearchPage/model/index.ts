@@ -2,7 +2,7 @@ import { createEffect, createEvent, createStore, sample } from "effector";
 import { repositoryService } from "../api/repository.service";
 import { convertReposResponse } from "../utils/convertReposResponse";
 import { Repository } from "./types";
-
+import { GetRepositoriesResponse } from "../api/getRepositoriesQuery";
 
 export type RepositoryState = {
   repositories: Repository[];
@@ -17,31 +17,28 @@ export const fetchRepositories = createEvent<{
 
 export const fetchMyRepositoriesFx = createEffect<
   { page?: number; lastCursor?: string },
-  RepositoryState
+  GetRepositoriesResponse
 >();
 fetchMyRepositoriesFx.use(async ({ lastCursor, page }) =>
-  repositoryService
-    .getMyRepositories({ afterCursor: lastCursor, page })
-    .then((r) => convertReposResponse(r))
+  repositoryService.getMyRepositories({ afterCursor: lastCursor, page })
 );
 
 export const fetchRepositoriesByNameFx = createEffect<
   { page?: number; lastCursor?: string; repoName: string },
-  RepositoryState
+  GetRepositoriesResponse
 >();
 fetchRepositoriesByNameFx.use(
   async ({ lastCursor: afterCursor, page, repoName }) =>
-    repositoryService
-      .getRepositoriesByName({ repoName, afterCursor, page })
-      .then((r) => convertReposResponse(r))
+    repositoryService.getRepositoriesByName({ repoName, afterCursor, page })
 );
 
 export const $repositories = createStore<RepositoryState | null>(null);
-$repositories.on(
-  fetchRepositoriesByNameFx.doneData,
-  (state, payload) => payload
+$repositories.on(fetchRepositoriesByNameFx.doneData, (state, payload) =>
+  convertReposResponse(payload)
 );
-$repositories.on(fetchMyRepositoriesFx.doneData, (state, payload) => payload);
+$repositories.on(fetchMyRepositoriesFx.doneData, (state, payload) =>
+  convertReposResponse(payload)
+);
 
 sample({
   clock: fetchRepositories,

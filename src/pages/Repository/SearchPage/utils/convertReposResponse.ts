@@ -1,4 +1,4 @@
-import { GetRepositoriesResponse } from "../api/getRepositories";
+import { GetRepositoriesResponse } from "../api/getRepositoriesQuery";
 import { RepositoryState } from "../model";
 
 export const convertReposResponse = (
