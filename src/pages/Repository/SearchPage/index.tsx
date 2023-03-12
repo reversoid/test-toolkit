@@ -18,11 +18,11 @@ const SearchPage = () => {
   });
 
   useEffect(() => {
-    const repoName = searchParams.get("repoName");
-    const page = searchParams.get("page");
+    const repoName = info.repoName
+    const page = info.page
 
     repoName && searchParams.set("repoName", repoName);
-    page && searchParams.set("page", page);
+    page && searchParams.set("page", String(page));
     !repoName && searchParams.delete("repoName");
 
     setSearchParams(searchParams);
@@ -34,6 +34,7 @@ const SearchPage = () => {
   const pagesCount = useMemo(() => {
     const count = repositories?.count ?? 1;
     const MAX_PAGES_VISIBLE = 10;
+    
     return count > MAX_PAGES_VISIBLE * PAGE_LIMIT
       ? MAX_PAGES_VISIBLE
       : Math.ceil((repositories?.count ?? 1) / PAGE_LIMIT);
