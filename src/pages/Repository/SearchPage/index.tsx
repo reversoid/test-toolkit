@@ -34,13 +34,9 @@ const SearchPage = () => {
   const pagesCount = useMemo(() => {
     const count = repositories?.count ?? 1;
     const MAX_PAGES_VISIBLE = 10;
-    const result =
-      count > MAX_PAGES_VISIBLE * PAGE_LIMIT
-        ? MAX_PAGES_VISIBLE
-        : Math.ceil((repositories?.count ?? 1) / PAGE_LIMIT);
-
-    console.log(result);
-    return result;
+    return count > MAX_PAGES_VISIBLE * PAGE_LIMIT
+      ? MAX_PAGES_VISIBLE
+      : Math.ceil((repositories?.count ?? 1) / PAGE_LIMIT);
   }, [repositories]);
 
   return (
