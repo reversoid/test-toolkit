@@ -10,6 +10,8 @@ import {
   getLastRepositoryCursor,
 } from "./getLastRepositoryCursorQuery";
 
+const MAXIMUM_PAGE_REACHABLE_WITH_ONE_QUERY = 11; // as max of github 'first' is 100
+
 export interface Options {
   page?: number;
   afterCursor?: string;
@@ -60,7 +62,7 @@ class RepositoryService {
     } else if (page) {
       const {
         search: { pageInfo, repositoryCount },
-      } = await this.getLastCursor({ page, username });      
+      } = await this.getLastCursor({ page, username });
 
       if (this.pageGoesBeyondRepoCount(page, repositoryCount)) {
         const EMPTY_RESPONSE = {
@@ -80,21 +82,37 @@ class RepositoryService {
   }
 
   private pageGoesBeyondRepoCount(page: number, repositoryCount: number) {
-    return Math.floor(PAGE_LIMIT * page / repositoryCount) > 1
+    return Math.floor((PAGE_LIMIT * page) / repositoryCount) > 1;
   }
 
   private async getLastCursor({
     page,
     username,
     repoName,
+    afterCursor,
   }: {
     page: number;
     username?: string;
     repoName?: string;
-  }) {
-    return fetchGQL<GetLastRepositoryCursorResponse>(
-      getLastRepositoryCursor({ page, username, repoName })
-    ).then((r) => r.data);
+    afterCursor?: string;
+  }): Promise<GetLastRepositoryCursorResponse> {
+    if (page <= MAXIMUM_PAGE_REACHABLE_WITH_ONE_QUERY) {
+      return fetchGQL<GetLastRepositoryCursorResponse>(
+        getLastRepositoryCursor({
+          page,
+          username: username,
+          repoName: repoName,
+          afterCursor,
+        })
+      ).then((r) => r.data);
+    } else {
+      return this.getLastCursor({
+        page: page - MAXIMUM_PAGE_REACHABLE_WITH_ONE_QUERY,
+        repoName,
+        username,
+        afterCursor,
+      });
+    }
   }
 }
 
