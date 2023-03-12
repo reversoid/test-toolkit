@@ -19,7 +19,8 @@ const SearchPage = () => {
   });
 
   useEffect(() => {
-    const { repoName, page } = info;
+    const page = searchParams.get("page");
+    const repoName = searchParams.get("repoName");
 
     repoName && searchParams.set("repoName", repoName);
     page && searchParams.set("page", String(page));
