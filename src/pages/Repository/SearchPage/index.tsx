@@ -4,7 +4,7 @@ import { Input } from "../../../shared/ui/Input/Input";
 import Paginator from "../../../shared/ui/Paginator/Paginator";
 import { PaginatorContainer } from "./ui/PaginatorContainer";
 import { RepositoryContainer } from "./ui/RepositoryContainer";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { $repositories, fetchRepositories } from "./model";
 import { useStore } from "effector-react";
 import { PAGE_LIMIT } from "./api/getRepositoriesQuery";
@@ -18,25 +18,30 @@ const SearchPage = () => {
   });
 
   useEffect(() => {
-    setInfo({
-      page: Number(searchParams.get("page")) || 1,
-      repoName: searchParams.get("repoName") ?? undefined,
-    });
-  }, [searchParams.get("page"), searchParams.get("repoName")]);
+    const repoName = searchParams.get("repoName");
+    const page = searchParams.get("page");
 
-  useEffect(() => {
-    if (!info.repoName) {
-      searchParams.delete("repoName");
-    } else {
-      searchParams.set("repoName", info.repoName);
-    }
-    searchParams.set("page", String(info.page));
+    repoName && searchParams.set("repoName", repoName);
+    page && searchParams.set("page", page);
+    !repoName && searchParams.delete("repoName");
 
     setSearchParams(searchParams);
     fetchRepositories(info);
   }, [info]);
 
   const repositories = useStore($repositories);
+
+  const pagesCount = useMemo(() => {
+    const count = repositories?.count ?? 1;
+    const MAX_PAGES_VISIBLE = 10;
+    const result =
+      count > MAX_PAGES_VISIBLE * PAGE_LIMIT
+        ? MAX_PAGES_VISIBLE
+        : Math.ceil((repositories?.count ?? 1) / PAGE_LIMIT);
+
+    console.log(result);
+    return result;
+  }, [repositories]);
 
   return (
     <>
@@ -73,10 +78,8 @@ const SearchPage = () => {
       <PaginatorContainer>
         <Paginator
           from={1}
-          to={Math.ceil((repositories?.count ?? 1) / PAGE_LIMIT)}
-          onSelect={(currentPage) =>
-            setSearchParams({ page: String(currentPage) })
-          }
+          to={pagesCount}
+          onSelect={(currentPage) => setInfo({ ...info, page: currentPage })}
         />
       </PaginatorContainer>
     </>
