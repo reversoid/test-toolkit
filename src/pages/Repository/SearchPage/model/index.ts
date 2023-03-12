@@ -7,6 +7,7 @@ import { GetRepositoriesResponse } from "../api/getRepositoriesQuery";
 export type RepositoryState = {
   repositories: Repository[];
   lastCursor: string;
+  count: number;
 };
 
 export const fetchRepositories = createEvent<{

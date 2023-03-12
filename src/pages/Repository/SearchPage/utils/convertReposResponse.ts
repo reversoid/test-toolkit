@@ -19,7 +19,7 @@ export const convertReposResponse = (
       id: node.id,
       url: node.url
     })),
-
+    count: response.search.repositoryCount,
     lastCursor: response.search.pageInfo.endCursor,
   };
 };

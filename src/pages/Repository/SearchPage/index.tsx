@@ -7,6 +7,7 @@ import { RepositoryContainer } from "./ui/RepositoryContainer";
 import { useEffect, useState } from "react";
 import { $repositories, fetchRepositories } from "./model";
 import { useStore } from "effector-react";
+import { PAGE_LIMIT } from "./api/getRepositoriesQuery";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,7 +73,7 @@ const SearchPage = () => {
       <PaginatorContainer>
         <Paginator
           from={1}
-          to={2}
+          to={Math.ceil((repositories?.count ?? 1) / PAGE_LIMIT)}
           onSelect={(currentPage) =>
             setSearchParams({ page: String(currentPage) })
           }
