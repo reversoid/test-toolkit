@@ -7,9 +7,7 @@ import { RepositoryContainer } from "./ui/RepositoryContainer";
 import { useEffect, useMemo, useState } from "react";
 import { $repositories, fetchRepositories } from "./model";
 import { useStore } from "effector-react";
-import { PAGE_LIMIT } from "./api/getRepositoriesQuery";
-
-const MAX_PAGES_VISIBLE = 10;
+import { generatePageRange } from "./utils/generatePageRange";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -20,7 +18,7 @@ const SearchPage = () => {
   });
 
   useEffect(() => {
-    const {repoName, page } = info
+    const { repoName, page } = info;
 
     repoName && searchParams.set("repoName", repoName);
     page && searchParams.set("page", String(page));
@@ -32,13 +30,8 @@ const SearchPage = () => {
 
   const repositories = useStore($repositories);
 
-  const pageTo = useMemo(() => {
-    const count = repositories?.count ?? 1;
-    const MAX_PAGES_VISIBLE = 10;
-    
-    return count > MAX_PAGES_VISIBLE * PAGE_LIMIT + info.page
-      ? MAX_PAGES_VISIBLE
-      : Math.ceil((repositories?.count ?? 1) / PAGE_LIMIT);
+  const { pageFrom, pageTo } = useMemo(() => {
+    return generatePageRange(repositories?.count ?? 1, info.page);
   }, [repositories]);
 
   return (
@@ -75,7 +68,7 @@ const SearchPage = () => {
 
       <PaginatorContainer>
         <Paginator
-          from={info.page}
+          from={pageFrom}
           to={pageTo}
           onSelect={(currentPage) => setInfo({ ...info, page: currentPage })}
           selected={info.page}
