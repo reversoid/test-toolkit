@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { $repositories, fetchRepositories } from "./model";
 import { useStore } from "effector-react";
 import { generatePageRange } from "./utils/generatePageRange";
+import { PAGE_LIMIT } from "./api/getRepositoriesQuery";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,6 +32,12 @@ const SearchPage = () => {
   const repositories = useStore($repositories);
 
   const { pageFrom, pageTo } = useMemo(() => {
+    if (info.page >  Math.ceil((repositories?.count ?? 1) / PAGE_LIMIT)) {
+      setInfo({
+        ...info,
+        page: Math.ceil((repositories?.count ?? 1) / PAGE_LIMIT),
+      });
+    }
     return generatePageRange(repositories?.count ?? 1, info.page);
   }, [repositories]);
 
